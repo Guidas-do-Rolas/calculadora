@@ -1,0 +1,137 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Calculadora de Notas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <script>
+        function calcularNotas() {
+            const nota1 = parseFloat(document.getElementById('nota1').value) * 0.15 || 0;
+            const nota2 = parseFloat(document.getElementById('nota2').value) * 0.15 || 0;
+            const nota3 = parseFloat(document.getElementById('nota3').value) * 0.25 || 0;
+            const nota4 = parseFloat(document.getElementById('nota4').value) * 0.20 || 0;
+            const nota5 = parseFloat(document.getElementById('nota5').value) * 0.25 || 0;
+
+            let total = nota1 + nota2 + nota3 + nota4 + nota5;
+            total = Math.min(total, 10.00); // Limit the result to 10.00
+            const resultadoBox = document.getElementById('resultado');
+            const resultadoTexto = document.getElementById('resultado-texto');
+
+            if (total >= 6) {
+                resultadoBox.className = 'bg-green-500 text-center text-white py-2 rounded-lg mb-4';
+                resultadoTexto.innerHTML = `Sua média é: ${total.toFixed(2)}<br>Você está ${(total - 6).toFixed(2)} pontos acima da média.`;
+            } else {
+                resultadoBox.className = 'bg-red-500 text-center text-white py-2 rounded-lg mb-4';
+                resultadoTexto.innerHTML = `Sua média é: ${total.toFixed(2)}<br>Você precisa de ${(6 - total).toFixed(2)} pontos para chegar na média.`;
+            }
+        }
+
+        function calcularMediaFinal() {
+            const nota1 = parseFloat(document.getElementById('media1').value) || 0;
+            const nota2 = parseFloat(document.getElementById('media2').value) || 0;
+            const nota3 = parseFloat(document.getElementById('media3').value) || 0;
+
+            let total = (nota1 + nota2 + nota3) / 3;
+            total = Math.min(total, 10.00); // Limit the result to 10.00
+            const resultadoBox = document.getElementById('resultado');
+            const resultadoTexto = document.getElementById('resultado-texto');
+
+            if (total >= 6) {
+                resultadoBox.className = 'bg-green-500 text-center text-white py-2 rounded-lg mb-4';
+                resultadoTexto.innerHTML = `Sua média final é: ${total.toFixed(2)}<br>Parabéns! Você passou.<br>Você está ${(total - 6).toFixed(2)} pontos acima da média final.`;
+            } else {
+                resultadoBox.className = 'bg-red-500 text-center text-white py-2 rounded-lg mb-4';
+                resultadoTexto.innerHTML = `Sua média final é: ${total.toFixed(2)}<br>Infelizmente, você não passou.<br>Você precisa de ${(6 - total).toFixed(2)} pontos para passar.`;
+            }
+        }
+
+        function limparCampos() {
+            const inputs = document.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => input.value = '');
+            document.getElementById('resultado').className = 'bg-yellow-500 text-center text-white py-2 rounded-lg mb-4';
+            document.getElementById('resultado-texto').textContent = 'Esperando notas...';
+        }
+
+        function mostrarTrimestre() {
+            limparCampos();
+            document.getElementById('trimestre-form').style.display = 'block';
+            document.getElementById('media-final-form').style.display = 'none';
+            document.getElementById('btn-trimestre').className = 'bg-blue-900 text-white py-2 px-4 rounded-l-lg';
+            document.getElementById('btn-media-final').className = 'bg-gray-200 text-gray-700 py-2 px-4 rounded-r-lg';
+        }
+
+        function mostrarMediaFinal() {
+            limparCampos();
+            document.getElementById('trimestre-form').style.display = 'none';
+            document.getElementById('media-final-form').style.display = 'block';
+            document.getElementById('btn-trimestre').className = 'bg-gray-200 text-gray-700 py-2 px-4 rounded-l-lg';
+            document.getElementById('btn-media-final').className = 'bg-blue-900 text-white py-2 px-4 rounded-r-lg';
+        }
+    </script>
+</head>
+<body class="bg-blue-900 flex items-center justify-center min-h-screen">
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+        <h1 class="text-center text-xl font-bold mb-4">Calculadora de Notas</h1>
+        <div class="flex justify-center mb-4">
+            <button id="btn-trimestre" class="bg-blue-900 text-white py-2 px-4 rounded-l-lg" onclick="mostrarTrimestre()">Trimestre</button>
+            <button id="btn-media-final" class="bg-gray-200 text-gray-700 py-2 px-4 rounded-r-lg" onclick="mostrarMediaFinal()">Média Final</button>
+        </div>
+        <div id="trimestre-form">
+            <div class="mb-4">
+                <label class="block text-gray-700" for="ano-escolar">Ano escolar:</label>
+                <select class="w-full border border-gray-300 rounded-lg p-2" id="ano-escolar">
+                    <option>9º Ano</option>
+                </select>
+                <p class="text-red-500 text-xs mt-1">
+                    * Caso sua nota tenha números depois da vírgula, utilize "."
+                    <br/>
+                    Ex: 7.5
+                </p>
+            </div>
+            <h2 class="text-center text-lg font-bold mb-4">Avaliações</h2>
+            <div class="mb-4">
+                <input class="w-full border border-gray-300 rounded-lg p-2" id="nota1" type="text" placeholder="Nota Prova Objetiva 1 (15%)"/>
+            </div>
+            <div class="mb-4">
+                <input class="w-full border border-gray-300 rounded-lg p-2" id="nota2" type="text" placeholder="Nota Prova Objetiva 2 (15%)"/>
+            </div>
+            <div class="mb-4">
+                <input class="w-full border border-gray-300 rounded-lg p-2" id="nota3" type="text" placeholder="Nota do Simulado (25%)"/>
+            </div>
+            <div class="mb-4">
+                <input class="w-full border border-gray-300 rounded-lg p-2" id="nota4" type="text" placeholder="Nota de Professor (20%)"/>
+            </div>
+            <div class="mb-4">
+                <input class="w-full border border-gray-300 rounded-lg p-2" id="nota5" type="text" placeholder="Avaliação Dissertativa (25%)"/>
+            </div>
+            <div class="flex justify-between mb-4">
+                <button class="bg-blue-900 text-white py-2 px-4 rounded-lg w-full mr-2" onclick="calcularNotas()">Calcular</button>
+                <button class="bg-red-500 text-white py-2 px-4 rounded-lg w-full ml-2" onclick="limparCampos()">Limpar</button>
+            </div>
+        </div>
+        <div id="media-final-form" style="display: none;">
+            <h2 class="text-center text-lg font-bold mb-4">Médias</h2>
+            <div class="mb-4">
+                <input class="w-full border border-gray-300 rounded-lg p-2" id="media1" type="text" placeholder="Média do 1° Trimestre"/>
+            </div>
+            <div class="mb-4">
+                <input class="w-full border border-gray-300 rounded-lg p-2" id="media2" type="text" placeholder="Média do 2° Trimestre"/>
+            </div>
+            <div class="mb-4">
+                <input class="w-full border border-gray-300 rounded-lg p-2" id="media3" type="text" placeholder="Média do 3° Trimestre"/>
+            </div>
+            <div class="flex justify-between mb-4">
+                <button class="bg-blue-900 text-white py-2 px-4 rounded-lg w-full mr-2" onclick="calcularMediaFinal()">Calcular</button>
+                <button class="bg-red-500 text-white py-2 px-4 rounded-lg w-full ml-2" onclick="limparCampos()">Limpar</button>
+            </div>
+        </div>
+        <div id="resultado" class="bg-yellow-500 text-center text-white py-2 rounded-lg mb-4">
+            <span id="resultado-texto">Esperando notas...</span>
+        </div>
+        <p class="text-center text-gray-700 text-xs">
+            Desenvolvido por Gustavo Guidini
+        </p>
+    </div>
+</body>
+</html>
